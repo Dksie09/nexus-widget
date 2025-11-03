@@ -16,9 +16,11 @@ const currencyOptions: { value: CurrencyType; label: string }[] = [
 
 interface FiatTabProps {
   onSubmit: () => void;
+  formState: "idle" | "loading"; // Add this
 }
 
-export function FiatTab({ onSubmit }: FiatTabProps) {
+export function FiatTab({ onSubmit, formState }: FiatTabProps) {
+  // Add formState here
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyType>("USD");
   const [amount, setAmount] = useState("");
 
@@ -77,7 +79,11 @@ export function FiatTab({ onSubmit }: FiatTabProps) {
         ]}
       />
 
-      <NeumorphicButton type="submit" variant="primary">
+      <NeumorphicButton
+        type="submit"
+        variant="primary"
+        isLoading={formState === "loading"}
+      >
         Confirm
       </NeumorphicButton>
     </form>

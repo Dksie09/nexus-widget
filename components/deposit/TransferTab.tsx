@@ -24,9 +24,10 @@ const assetOptions: { value: AssetType; label: string }[] = [
 
 interface TransferTabProps {
   onSubmit: () => void;
+  formState: "idle" | "loading";
 }
 
-export function TransferTab({ onSubmit }: TransferTabProps) {
+export function TransferTab({ onSubmit, formState }: TransferTabProps) {
   const { themeConfig } = useTheme();
   const [selectedChain, setSelectedChain] = useState<ChainType>("Arbitrium");
   const [selectedAsset, setSelectedAsset] = useState<AssetType>("USDT");
@@ -139,7 +140,11 @@ export function TransferTab({ onSubmit }: TransferTabProps) {
         }
       />
 
-      <NeumorphicButton type="submit" variant="primary">
+      <NeumorphicButton
+        type="submit"
+        variant="primary"
+        isLoading={formState === "loading"}
+      >
         Confirm
       </NeumorphicButton>
     </form>

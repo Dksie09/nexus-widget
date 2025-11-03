@@ -42,9 +42,15 @@ export function DepositDialog({ triggerText = "Deposit" }: DepositDialogProps) {
       />
 
       <NeumorphicTabPanels activeKey={activeTab}>
-        {activeTab === "wallet" && <WalletTab onSubmit={handleSubmit} />}
-        {activeTab === "transfer" && <TransferTab onSubmit={handleSubmit} />}
-        {activeTab === "fiat" && <FiatTab onSubmit={handleSubmit} />}
+        {activeTab === "wallet" && (
+          <WalletTab onSubmit={handleSubmit} formState={formState} />
+        )}
+        {activeTab === "transfer" && (
+          <TransferTab onSubmit={handleSubmit} formState={formState} />
+        )}
+        {activeTab === "fiat" && (
+          <FiatTab onSubmit={handleSubmit} formState={formState} />
+        )}
       </NeumorphicTabPanels>
     </NeumorphicDialog>
   );

@@ -26,9 +26,10 @@ const percentages = [25, 50, 75, 100];
 
 interface WalletTabProps {
   onSubmit: () => void;
+  formState: "idle" | "loading";
 }
 
-export function WalletTab({ onSubmit }: WalletTabProps) {
+export function WalletTab({ onSubmit, formState }: WalletTabProps) {
   const { themeConfig } = useTheme();
   const [selectedSourceAsset, setSelectedSourceAsset] =
     useState<SourceAssetType>("customize");
@@ -155,7 +156,11 @@ export function WalletTab({ onSubmit }: WalletTabProps) {
         ]}
       />
 
-      <NeumorphicButton type="submit" variant="primary">
+      <NeumorphicButton
+        type="submit"
+        variant="primary"
+        isLoading={formState === "loading"}
+      >
         Confirm
       </NeumorphicButton>
     </form>
