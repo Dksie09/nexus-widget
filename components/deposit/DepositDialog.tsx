@@ -1,0 +1,52 @@
+"use client";
+
+import { useState } from "react";
+import {
+  NeumorphicDialog,
+  NeumorphicDialogTabs,
+  NeumorphicDialogContent,
+} from "@/components/ui/NeumorphicDialog";
+import { WalletTab } from "./WalletTab";
+import { TransferTab } from "./TransferTab";
+import { FiatTab } from "./FiatTab";
+
+type TabType = "wallet" | "transfer" | "fiat";
+
+const tabs: { id: TabType; label: string }[] = [
+  { id: "wallet", label: "Wallet" },
+  { id: "transfer", label: "Transfer QR" },
+  { id: "fiat", label: "Fiat" },
+];
+
+interface DepositDialogProps {
+  triggerText?: string;
+}
+
+export function DepositDialog({ triggerText = "Deposit" }: DepositDialogProps) {
+  const [activeTab, setActiveTab] = useState<TabType>("wallet");
+  const [formState, setFormState] = useState<"idle" | "loading">("idle");
+
+  const handleSubmit = () => {
+    setFormState("loading");
+    // Simulate API call
+    setTimeout(() => {
+      setFormState("idle");
+    }, 1500);
+  };
+
+  return (
+    <NeumorphicDialog triggerText={triggerText} title="Deposit">
+      <NeumorphicDialogTabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={(tab) => setActiveTab(tab as TabType)}
+      />
+
+      <NeumorphicDialogContent activeKey={activeTab}>
+        {activeTab === "wallet" && <WalletTab onSubmit={handleSubmit} />}
+        {activeTab === "transfer" && <TransferTab onSubmit={handleSubmit} />}
+        {activeTab === "fiat" && <FiatTab onSubmit={handleSubmit} />}
+      </NeumorphicDialogContent>
+    </NeumorphicDialog>
+  );
+}
