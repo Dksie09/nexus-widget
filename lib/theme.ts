@@ -4,18 +4,18 @@ export interface ThemeConfig {
   background: string;
   lightShadow: string;
   darkShadow: string;
+  lightShadowHover: string;
   insetLightShadow: string;
   insetDarkShadow: string;
 }
 
-// Get theme config from CSS variables
 export function getThemeConfig(): ThemeConfig {
   if (typeof window === "undefined") {
-    // Server-side fallback
     return {
       background: "#F0F0F3",
       lightShadow: "#FFFFFF",
       darkShadow: "rgba(174, 174, 192, 0.4)",
+      lightShadowHover: "rgba(174, 174, 192, 0.08)",
       insetLightShadow: "#FFFFFF",
       insetDarkShadow: "rgba(174, 174, 192, 0.4)",
     };
@@ -28,6 +28,7 @@ export function getThemeConfig(): ThemeConfig {
     darkShadow:
       styles.getPropertyValue("--neu-dark").trim() ||
       "rgba(174, 174, 192, 0.4)",
+    lightShadowHover: "rgba(174, 174, 192, 0.08)",
     insetLightShadow:
       styles.getPropertyValue("--neu-inset-light").trim() || "#FFFFFF",
     insetDarkShadow:
@@ -36,13 +37,12 @@ export function getThemeConfig(): ThemeConfig {
   };
 }
 
-// Legacy themes object - kept for backwards compatibility
-// Now these are just stored in CSS (globals.css)
 export const themes: Record<ThemeColor, ThemeConfig> = {
   blue: {
     background: "#F0F0F3",
     lightShadow: "#FFFFFF",
     darkShadow: "rgba(174, 174, 192, 0.4)",
+    lightShadowHover: "rgba(174, 174, 192, 0.08)",
     insetLightShadow: "#FFFFFF",
     insetDarkShadow: "rgba(174, 174, 192, 0.4)",
   },
@@ -50,6 +50,7 @@ export const themes: Record<ThemeColor, ThemeConfig> = {
     background: "#F3F0F3",
     lightShadow: "#FFFFFF",
     darkShadow: "rgba(192, 174, 192, 0.4)",
+    lightShadowHover: "rgba(192, 174, 192, 0.08)",
     insetLightShadow: "#FFFFFF",
     insetDarkShadow: "rgba(192, 174, 192, 0.4)",
   },
@@ -57,6 +58,7 @@ export const themes: Record<ThemeColor, ThemeConfig> = {
     background: "#F0F3F0",
     lightShadow: "#FFFFFF",
     darkShadow: "rgba(174, 192, 174, 0.4)",
+    lightShadowHover: "rgba(174, 192, 174, 0.08)",
     insetLightShadow: "#FFFFFF",
     insetDarkShadow: "rgba(174, 192, 174, 0.4)",
   },
@@ -93,7 +95,6 @@ export function getNeumorphicShadow(
 }
 
 export function getDialogOverlayColor(theme: ThemeConfig): string {
-  // Extract RGB from background and add alpha
   return (
     theme.background
       .replace("#", "rgba(")

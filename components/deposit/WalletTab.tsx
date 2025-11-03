@@ -46,14 +46,12 @@ export function WalletTab({ onSubmit }: WalletTabProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {/* Source Assets Dropdown */}
       <NeumorphicSelect
         options={sourceAssetOptions}
         value={selectedSourceAsset}
         onChange={setSelectedSourceAsset}
       />
 
-      {/* Amount Input with Token Selector */}
       <NeumorphicInput
         type="number"
         placeholder="Enter amount..."
@@ -73,7 +71,6 @@ export function WalletTab({ onSubmit }: WalletTabProps) {
         }
       />
 
-      {/* Percentage Selector */}
       <div className="flex gap-2">
         {percentages.map((percent) => (
           <button
@@ -100,7 +97,6 @@ export function WalletTab({ onSubmit }: WalletTabProps) {
         ))}
       </div>
 
-      {/* Transaction Stats */}
       <TransactionStats
         className="flex flex-col gap-4 rounded-2xl p-5"
         rows={[

@@ -52,7 +52,6 @@ export function TransferTab({ onSubmit }: TransferTabProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {/* Chain and Asset Selectors */}
       <div className="flex gap-3">
         <NeumorphicSelect
           options={chainOptions}
@@ -68,7 +67,6 @@ export function TransferTab({ onSubmit }: TransferTabProps) {
         />
       </div>
 
-      {/* QR Code Placeholder */}
       <div
         className="w-full aspect-square rounded-2xl flex items-center justify-center"
         style={{
@@ -79,7 +77,6 @@ export function TransferTab({ onSubmit }: TransferTabProps) {
         <span className="text-gray-400 text-sm">QR Code</span>
       </div>
 
-      {/* Deposit Address Input with Copy Button */}
       <NeumorphicInput
         type="text"
         value={depositAddress}

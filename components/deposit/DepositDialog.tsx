@@ -28,7 +28,6 @@ export function DepositDialog({ triggerText = "Deposit" }: DepositDialogProps) {
 
   const handleSubmit = () => {
     setFormState("loading");
-    // Simulate API call
     setTimeout(() => {
       setFormState("idle");
     }, 1500);

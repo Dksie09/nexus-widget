@@ -48,7 +48,6 @@ export function NeumorphicDialog({
       }
 
       if ((event.ctrlKey || event.metaKey) && event.key === "Enter" && open) {
-        // Allow form submission via Cmd/Ctrl+Enter
         const form = dialogRef.current?.querySelector("form");
         if (form) {
           form.dispatchEvent(
@@ -84,7 +83,6 @@ export function NeumorphicDialog({
 
   return (
     <div className="relative">
-      {/* Trigger Button */}
       <AnimatePresence>
         {!open && (
           <>
@@ -133,7 +131,6 @@ export function NeumorphicDialog({
         )}
       </AnimatePresence>
 
-      {/* Dialog Overlay and Content */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -166,7 +163,6 @@ export function NeumorphicDialog({
                 `,
               }}
             >
-              {/* Close Button */}
               <motion.button
                 onClick={() => setOpen(false)}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -223,10 +219,7 @@ export function NeumorphicDialog({
   );
 }
 
-// Subcomponents for better composition
-// Re-export the standalone tab components for backward compatibility
 export const NeumorphicDialogTabs = NeumorphicTabs;
 export const NeumorphicDialogContent = NeumorphicTabPanels;
 
-// Export types for convenience
 export type { NeumorphicTabsProps, NeumorphicTabPanelsProps };

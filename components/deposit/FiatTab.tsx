@@ -30,7 +30,6 @@ export function FiatTab({ onSubmit }: FiatTabProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {/* Amount Input with Currency Selector */}
       <NeumorphicInput
         type="number"
         placeholder="Enter amount..."
@@ -47,7 +46,6 @@ export function FiatTab({ onSubmit }: FiatTabProps) {
         }
       />
 
-      {/* Transaction Stats */}
       <TransactionStats
         className="flex flex-col gap-4 rounded-2xl p-5"
         rows={[

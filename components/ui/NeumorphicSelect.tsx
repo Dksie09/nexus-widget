@@ -84,6 +84,39 @@ function NeumorphicSelectInner<T extends string>(
     </svg>
   );
 
+  const DropdownOption = ({
+    option,
+    isSelected,
+    onClick,
+  }: {
+    option: Option<T>;
+    isSelected: boolean;
+    onClick: () => void;
+  }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="w-full px-4 py-2 text-sm font-medium transition-all duration-200 text-left"
+        style={{
+          background: isSelected
+            ? themeConfig.darkShadow.replace("0.4)", "0.15)")
+            : isHovered
+            ? themeConfig.lightShadowHover
+            : "transparent",
+          color: isSelected ? "#1F2937" : "#374151",
+          fontWeight: isSelected ? 600 : 500,
+        }}
+      >
+        {option.label}
+      </button>
+    );
+  };
+
   return (
     <div ref={ref || containerRef} className={cn("relative", className)}>
       <button
@@ -122,23 +155,15 @@ function NeumorphicSelectInner<T extends string>(
             }}
           >
             {options.map((option) => (
-              <button
+              <DropdownOption
                 key={String(option.value)}
-                type="button"
+                option={option}
+                isSelected={value === option.value}
                 onClick={() => {
                   onChange(option.value);
                   setIsOpen(false);
                 }}
-                className="w-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100/50 transition-colors text-left"
-                style={{
-                  background:
-                    value === option.value
-                      ? themeConfig.darkShadow.replace("0.4)", "0.1)")
-                      : "transparent",
-                }}
-              >
-                {option.label}
-              </button>
+              />
             ))}
           </motion.div>
         )}
