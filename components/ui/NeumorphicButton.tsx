@@ -3,6 +3,8 @@
 import { forwardRef, ButtonHTMLAttributes } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
+import { getNeumorphicShadow } from "@/lib/theme";
 
 export interface NeumorphicButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -26,24 +28,15 @@ export const NeumorphicButton = forwardRef<
     },
     ref
   ) => {
-    const baseStyles =
-      variant === "primary"
-        ? {
-            background: "#F0F0F3",
-            boxShadow: `
-            -5px -5px 15px 0 #FFFFFF,
-            5px 5px 15px 0 rgba(174, 174, 192, 0.4),
-            inset -5px -5px 10px 0 rgba(174, 174, 192, 0.25),
-            inset 5px 5px 10px 0 #FFFFFF
-          `,
-          }
-        : {
-            background: "#F0F0F3",
-            boxShadow: `
-            -5px -5px 10px 0 #FFFFFF,
-            5px 5px 10px 0 rgba(174, 174, 192, 0.4)
-          `,
-          };
+    const { themeConfig } = useTheme();
+
+    const baseStyles = {
+      background: themeConfig.background,
+      boxShadow: getNeumorphicShadow(
+        themeConfig,
+        variant === "primary" ? "primary" : "default"
+      ),
+    };
 
     return (
       <button

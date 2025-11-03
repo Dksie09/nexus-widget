@@ -5,6 +5,8 @@ import { NeumorphicInput } from "@/components/ui/NeumorphicInput";
 import { NeumorphicSelect } from "@/components/ui/NeumorphicSelect";
 import { NeumorphicButton } from "@/components/ui/NeumorphicButton";
 import { TransactionStats } from "@/components/ui/TransactionStats";
+import { useTheme } from "@/contexts/ThemeContext";
+import { getNeumorphicShadow } from "@/lib/theme";
 
 type SourceAssetType = "customize" | "single";
 type TokenType = "USDC" | "USDT" | "ETH";
@@ -27,6 +29,7 @@ interface WalletTabProps {
 }
 
 export function WalletTab({ onSubmit }: WalletTabProps) {
+  const { themeConfig } = useTheme();
   const [selectedSourceAsset, setSelectedSourceAsset] =
     useState<SourceAssetType>("customize");
   const [selectedToken, setSelectedToken] = useState<TokenType>("USDC");
@@ -83,11 +86,8 @@ export function WalletTab({ onSubmit }: WalletTabProps) {
             style={
               selectedPercentage === percent
                 ? {
-                    background: "#F0F0F3",
-                    boxShadow: `
-                      -5px -5px 10px 0 #FFFFFF,
-                      5px 5px 10px 0 rgba(174, 174, 192, 0.4)
-                    `,
+                    background: themeConfig.background,
+                    boxShadow: getNeumorphicShadow(themeConfig),
                   }
                 : {
                     background: "transparent",
@@ -105,7 +105,6 @@ export function WalletTab({ onSubmit }: WalletTabProps) {
         className="flex flex-col gap-4 rounded-2xl p-5"
         rows={[
           {
-            label: "You spend",
             value: (
               <div className="flex flex-col">
                 <span className="text-gray-800 font-bold text-xl">
@@ -144,11 +143,9 @@ export function WalletTab({ onSubmit }: WalletTabProps) {
           {
             label: "Total Fees",
             value: (
-              <div className="flex flex-col items-end">
-                <span className="text-gray-800 font-bold text-lg">
-                  ${amount ? (parseFloat(amount) * 0.005).toFixed(2) : "0.00"}
-                </span>
-              </div>
+              <span className="text-gray-800 font-bold text-lg">
+                ${amount ? (parseFloat(amount) * 0.005).toFixed(2) : "0.00"}
+              </span>
             ),
             action: (
               <button

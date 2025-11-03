@@ -2,6 +2,13 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, useRef, ReactNode } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
+import {
+  NeumorphicTabs,
+  NeumorphicTabPanels,
+  type NeumorphicTabsProps,
+  type NeumorphicTabPanelsProps,
+} from "./NeumorphicTabs";
 
 export interface NeumorphicDialogProps {
   trigger?: ReactNode;
@@ -23,6 +30,7 @@ export function NeumorphicDialog({
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
+  const { themeConfig } = useTheme();
 
   const setOpen = (value: boolean) => {
     if (!isControlled) {
@@ -94,12 +102,15 @@ export function NeumorphicDialog({
                 }}
                 className="relative w-32 h-16 rounded-3xl transition-all duration-300 hover:scale-105 active:scale-95 group"
                 style={{
-                  background: "#F0F0F3",
+                  background: themeConfig.background,
                   boxShadow: `
-                    -10px -10px 30px 0 #FFFFFF,
-                    10px 10px 30px 0 rgba(174, 174, 192, 0.4),
-                    inset -10px -10px 10px 0 rgba(174, 174, 192, 0.25),
-                    inset 10px 10px 10px 0 #FFFFFF
+                    -10px -10px 30px 0 ${themeConfig.lightShadow},
+                    10px 10px 30px 0 ${themeConfig.darkShadow},
+                    inset -10px -10px 10px 0 ${themeConfig.insetDarkShadow.replace(
+                      "0.4",
+                      "0.25"
+                    )},
+                    inset 10px 10px 10px 0 ${themeConfig.insetLightShadow}
                   `,
                 }}
               >
@@ -128,28 +139,65 @@ export function NeumorphicDialog({
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            animate={{ opacity: 1, backdropFilter: "blur(20px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(5px)" }}
             exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
             transition={{ duration: 0.2 }}
             style={{
-              backgroundColor: "rgba(240, 240, 243, 0.3)",
+              backgroundColor:
+                themeConfig.background
+                  .replace("#", "rgba(")
+                  .match(/.{2}/g)!
+                  .map((hex) => parseInt(hex, 16))
+                  .join(", ") + ", 0.3)",
             }}
           >
             <motion.div
               ref={dialogRef}
-              className="w-full max-w-md rounded-3xl p-8"
+              className="w-full max-w-md rounded-3xl p-8 relative"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
               style={{
-                background: "#F0F0F3",
+                background: themeConfig.background,
                 boxShadow: `
-                  -10px -10px 30px 0 #FFFFFF,
-                  10px 10px 30px 0 rgba(174, 174, 192, 0.4)
+                  -10px -10px 30px 0 ${themeConfig.lightShadow},
+                  10px 10px 30px 0 ${themeConfig.darkShadow}
                 `,
               }}
             >
+              {/* Close Button */}
+              <motion.button
+                onClick={() => setOpen(false)}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                  delay: 0.1,
+                }}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center group transition-all duration-200"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="transition-colors duration-200"
+                  style={{
+                    stroke: "#9CA3AF",
+                  }}
+                >
+                  <path
+                    d="M12 4L4 12M4 4L12 12"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    className="group-hover:stroke-red-500 transition-all duration-200"
+                  />
+                </svg>
+              </motion.button>
+
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -176,82 +224,9 @@ export function NeumorphicDialog({
 }
 
 // Subcomponents for better composition
-export function NeumorphicDialogTabs({
-  tabs,
-  activeTab,
-  onTabChange,
-}: {
-  tabs: { id: string; label: string }[];
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-}) {
-  return (
-    <div
-      className="relative flex gap-2 p-2 rounded-2xl"
-      style={{
-        background: "#F0F0F3",
-        boxShadow: `
-          inset -5px -5px 10px 0 rgba(255, 255, 255, 0.5),
-          inset 5px 5px 10px 0 rgba(174, 174, 192, 0.3)
-        `,
-      }}
-    >
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          onClick={() => onTabChange(tab.id)}
-          className="relative flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-colors duration-200 z-10"
-          style={{
-            color: "#9CA3AF",
-            textShadow:
-              activeTab === tab.id
-                ? `
-                    0 0 10px rgba(174, 174, 192, 0.2),
-                    0 0 20px rgba(174, 174, 192, 0.2)
-                  `
-                : "none",
-          }}
-        >
-          {activeTab === tab.id && (
-            <motion.div
-              layoutId="tab-indicator"
-              className="absolute inset-0 rounded-xl"
-              style={{
-                background: "#F0F0F3",
-                boxShadow: `
-                  -10px -10px 10px 0 rgba(255, 255, 255, 0.7),
-                  10px 10px 10px 0 rgba(174, 174, 192, 0.2)
-                `,
-              }}
-              transition={{
-                duration: 0.2,
-                ease: [0.25, 0.46, 0.45, 0.94],
-              }}
-            />
-          )}
-          <span className="relative z-10">{tab.label}</span>
-        </button>
-      ))}
-    </div>
-  );
-}
+// Re-export the standalone tab components for backward compatibility
+export const NeumorphicDialogTabs = NeumorphicTabs;
+export const NeumorphicDialogContent = NeumorphicTabPanels;
 
-export function NeumorphicDialogContent({
-  children,
-  activeKey,
-}: {
-  children: ReactNode;
-  activeKey?: string;
-}) {
-  return (
-    <motion.div
-      key={activeKey}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.2 }}
-    >
-      {children}
-    </motion.div>
-  );
-}
+// Export types for convenience
+export type { NeumorphicTabsProps, NeumorphicTabPanelsProps };

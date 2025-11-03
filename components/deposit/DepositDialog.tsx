@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { NeumorphicDialog } from "@/components/ui/NeumorphicDialog";
 import {
-  NeumorphicDialog,
-  NeumorphicDialogTabs,
-  NeumorphicDialogContent,
-} from "@/components/ui/NeumorphicDialog";
+  NeumorphicTabs,
+  NeumorphicTabPanels,
+} from "@/components/ui/NeumorphicTabs";
 import { WalletTab } from "./WalletTab";
 import { TransferTab } from "./TransferTab";
 import { FiatTab } from "./FiatTab";
@@ -36,17 +36,17 @@ export function DepositDialog({ triggerText = "Deposit" }: DepositDialogProps) {
 
   return (
     <NeumorphicDialog triggerText={triggerText} title="Deposit">
-      <NeumorphicDialogTabs
+      <NeumorphicTabs
         tabs={tabs}
         activeTab={activeTab}
         onTabChange={(tab) => setActiveTab(tab as TabType)}
       />
 
-      <NeumorphicDialogContent activeKey={activeTab}>
+      <NeumorphicTabPanels activeKey={activeTab}>
         {activeTab === "wallet" && <WalletTab onSubmit={handleSubmit} />}
         {activeTab === "transfer" && <TransferTab onSubmit={handleSubmit} />}
         {activeTab === "fiat" && <FiatTab onSubmit={handleSubmit} />}
-      </NeumorphicDialogContent>
+      </NeumorphicTabPanels>
     </NeumorphicDialog>
   );
 }

@@ -2,9 +2,10 @@
 
 import { motion } from "motion/react";
 import { ReactNode } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface StatRow {
-  label: string;
+  label?: string;
   value: ReactNode;
   action?: ReactNode;
 }
@@ -15,6 +16,8 @@ export interface TransactionStatsProps {
 }
 
 export function TransactionStats({ rows, className }: TransactionStatsProps) {
+  const { themeConfig } = useTheme();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -22,10 +25,16 @@ export function TransactionStats({ rows, className }: TransactionStatsProps) {
       transition={{ delay: 0.1 }}
       className={className}
       style={{
-        background: "#F0F0F3",
+        background: themeConfig.background,
         boxShadow: `
-          inset -3px -3px 8px 0 rgba(255, 255, 255, 0.5),
-          inset 3px 3px 8px 0 rgba(174, 174, 192, 0.2)
+          inset -3px -3px 8px 0 ${themeConfig.insetLightShadow.replace(
+            "1)",
+            "0.5)"
+          )},
+          inset 3px 3px 8px 0 ${themeConfig.insetDarkShadow.replace(
+            "0.4",
+            "0.2"
+          )}
         `,
       }}
     >
@@ -35,17 +44,25 @@ export function TransactionStats({ rows, className }: TransactionStatsProps) {
             <div
               className="h-px"
               style={{
-                background:
-                  "linear-gradient(90deg, transparent, rgba(174, 174, 192, 0.3), transparent)",
+                background: `linear-gradient(90deg, transparent, ${themeConfig.darkShadow.replace(
+                  "0.4",
+                  "0.3"
+                )}, transparent)`,
               }}
             />
           )}
           <div className="flex items-center justify-between">
-            <div className="flex flex-col gap-1">
-              <span className="text-gray-600 font-medium">{row.label}</span>
-              {row.action}
-            </div>
-            <div className="flex flex-col items-end">{row.value}</div>
+            {row.label ? (
+              <>
+                <span className="text-gray-600 font-medium">{row.label}</span>
+                {row.value}
+              </>
+            ) : (
+              <>
+                {row.value}
+                {row.action}
+              </>
+            )}
           </div>
         </div>
       ))}

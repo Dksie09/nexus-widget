@@ -2,6 +2,8 @@
 
 import { forwardRef, InputHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
+import { getNeumorphicShadow } from "@/lib/theme";
 
 export interface NeumorphicInputProps
   extends InputHTMLAttributes<HTMLInputElement> {
@@ -12,6 +14,8 @@ export const NeumorphicInput = forwardRef<
   HTMLInputElement,
   NeumorphicInputProps
 >(({ className, rightElement, ...props }, ref) => {
+  const { themeConfig } = useTheme();
+
   return (
     <div className="relative w-full">
       <input
@@ -22,11 +26,8 @@ export const NeumorphicInput = forwardRef<
           className
         )}
         style={{
-          background: "#F0F0F3",
-          boxShadow: `
-            inset -5px -5px 10px 0 #FFFFFF,
-            inset 5px 5px 10px 0 rgba(174, 174, 192, 0.4)
-          `,
+          background: themeConfig.background,
+          boxShadow: getNeumorphicShadow(themeConfig, "inset"),
         }}
         {...props}
       />

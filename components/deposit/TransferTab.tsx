@@ -4,6 +4,8 @@ import { useState } from "react";
 import { NeumorphicInput } from "@/components/ui/NeumorphicInput";
 import { NeumorphicSelect } from "@/components/ui/NeumorphicSelect";
 import { NeumorphicButton } from "@/components/ui/NeumorphicButton";
+import { useTheme } from "@/contexts/ThemeContext";
+import { getNeumorphicShadow } from "@/lib/theme";
 
 type ChainType = "Arbitrium" | "Base" | "Sepolia";
 type AssetType = "USDT" | "USDC" | "ETH";
@@ -25,6 +27,7 @@ interface TransferTabProps {
 }
 
 export function TransferTab({ onSubmit }: TransferTabProps) {
+  const { themeConfig } = useTheme();
   const [selectedChain, setSelectedChain] = useState<ChainType>("Arbitrium");
   const [selectedAsset, setSelectedAsset] = useState<AssetType>("USDT");
   const [depositAddress] = useState(
@@ -69,11 +72,8 @@ export function TransferTab({ onSubmit }: TransferTabProps) {
       <div
         className="w-full aspect-square rounded-2xl flex items-center justify-center"
         style={{
-          background: "#F0F0F3",
-          boxShadow: `
-            inset -5px -5px 10px 0 #FFFFFF,
-            inset 5px 5px 10px 0 rgba(174, 174, 192, 0.4)
-          `,
+          background: themeConfig.background,
+          boxShadow: getNeumorphicShadow(themeConfig, "inset"),
         }}
       >
         <span className="text-gray-400 text-sm">QR Code</span>

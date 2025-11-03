@@ -3,6 +3,8 @@
 import { AnimatePresence, motion } from "motion/react";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
+import { getNeumorphicShadow } from "@/lib/theme";
 
 interface Option<T> {
   value: T;
@@ -29,6 +31,7 @@ function NeumorphicSelectInner<T extends string>(
 ) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { themeConfig } = useTheme();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -91,11 +94,8 @@ function NeumorphicSelectInner<T extends string>(
           compact ? "px-3 py-2 hover:scale-105" : "px-4 py-3 hover:scale-[1.01]"
         )}
         style={{
-          background: "#F0F0F3",
-          boxShadow: `
-            -5px -5px 10px 0 #FFFFFF,
-            5px 5px 10px 0 rgba(174, 174, 192, 0.4)
-          `,
+          background: themeConfig.background,
+          boxShadow: getNeumorphicShadow(themeConfig),
         }}
       >
         <span>{selectedOption?.label || "Select..."}</span>
@@ -114,10 +114,10 @@ function NeumorphicSelectInner<T extends string>(
               compact ? "right-0" : "left-0 right-0"
             )}
             style={{
-              background: "#F0F0F3",
+              background: themeConfig.background,
               boxShadow: `
-                -5px -5px 15px 0 #FFFFFF,
-                5px 5px 15px 0 rgba(174, 174, 192, 0.4)
+                -5px -5px 15px 0 ${themeConfig.lightShadow},
+                5px 5px 15px 0 ${themeConfig.darkShadow}
               `,
             }}
           >
@@ -133,7 +133,7 @@ function NeumorphicSelectInner<T extends string>(
                 style={{
                   background:
                     value === option.value
-                      ? "rgba(174, 174, 192, 0.1)"
+                      ? themeConfig.darkShadow.replace("0.4)", "0.1)")
                       : "transparent",
                 }}
               >
